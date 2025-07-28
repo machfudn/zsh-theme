@@ -18,11 +18,12 @@ local FG_BLUE="%F{33}"
 local FG_ORANGE="%F{208}"
 local FG_YELLOW="%F{226}"
 local FG_PURPLE="%F{141}"
+local FG_GREEN="%F{2}"
 local BG_BLUE="%K{33}"
 local BG_ORANGE="%K{208}"
 local BG_YELLOW="%K{226}"
 local BG_PURPLE="%K{141}"
-local FG_GREEN="%F{2}"
+local BG_GREEN="%K{2}"
 local RESET="%f%k"
 
 # Powerline Separator Helper
@@ -35,48 +36,51 @@ function powerline_sep() {
 # Git segment
 function git_segment() {
   local next_bg="$1"  # Warna latar setelah git segment (default ke 0 jika kosong)
-  [[ -z "$next_bg" ]] && next_bg=0
+  [[ -z "$next_bg" ]] && next_bg=2
 
   local branch=$(git symbolic-ref --short HEAD 2>/dev/null)
   local dirty=$(git status --porcelain 2>/dev/null)
   if [[ -n "$branch" ]]; then
     local status_icon=" $ICON_OK"
     [[ -n "$dirty" ]] && status_icon=" $ICON_FAIL"
-    echo "${BG_YELLOW}${FG_BLACK} ${ICON_BRANCH} ${branch}${status_icon} $(powerline_sep ${next_bg} 226)"
+    echo "${BG_GREEN}${FG_WHITE} ${ICON_BRANCH} ${branch}${status_icon} $(powerline_sep ${next_bg} 2 )${FG_GREEN}${DIAMOND_R}"
   fi
 }
 
 
 
 function precmd() {
+
+  # PROMPT (baris bawah mulai dari panah)
   PROMPT=''
 
   # Segmen: Shell
   PROMPT+="${FG_BLUE}${DIAMOND_L}${RESET}"
-  PROMPT+="${BG_BLUE}${FG_WHITE} ${ICON_SHELL} Machfudin "
+  PROMPT+="${BG_BLUE}${FG_WHITE} ${ICON_CLOCK} $(date +%H:%M) "
   PROMPT+="$(powerline_sep 208 33)"  # Biru → Oranye
 
   # Segmen: Path
-  git rev-parse --is-inside-work-tree &>/dev/null
-  if [[ $? -eq 0 ]]; then
-    NEXT_COLOR=226
+  if git rev-parse --is-inside-work-tree &>/dev/null; then
+    SEGMENT_PATH="$(powerline_sep 2 208)"
   else
-    NEXT_COLOR=0
+    SEGMENT_PATH="$(powerline_sep 208 208)${FG_ORANGE}${DIAMOND_R}"
   fi
 
   PROMPT+="${BG_ORANGE}${FG_WHITE} ${ICON_FOLDER} %1~ "
-  PROMPT+="$(powerline_sep ${NEXT_COLOR} 208)"
+  PROMPT+="${SEGMENT_PATH}"
 
   # Segmen: Git
   PROMPT+="$(git_segment)"
 
-  PROMPT+="${RESET} "
+  # Reset dan baris baru
+  PROMPT+="${RESET}"
+  
 
-  # Baris prompt bawah
+  # Baris kedua prompt: panah input
   PROMPT+=$'\n'
   PROMPT+="${FG_GREEN}→ ${RESET}"
+
 }
 
 
-# RPROMPT (kanan atas, misalnya waktu)
-RPROMPT='${FG_WHITE}${ICON_CLOCK} $(date +%H:%M)'
+
