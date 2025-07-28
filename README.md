@@ -8,6 +8,10 @@ tema terminal zsh untuk ohmyzsh
 
 ![preview](img/agnoster-plus.png)
 
+### blue-owl-plus
+
+![preview](img/blue-owl-plus.png)
+
 ## requirement
 
 - zsh
