@@ -6,11 +6,11 @@ tema terminal zsh untuk ohmyzsh
 
 ### agnoster-plus
 
-![preview](img/agnoster-plus.png)
+![preview agnoster-plus](img/agnoster-plus.png)
 
 ### blue-owl-plus
 
-![preview](img/blue-owl-plus.png)
+![preview blue-owl-plus](img/blue-owl-plus.png)
 
 ## requirement
 
